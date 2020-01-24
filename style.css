@@ -1,0 +1,145 @@
+* {
+	/*needs to fix problem with 100% width and paddings*/
+	/*paddings includes in width calculation*/
+	box-sizing: border-box;
+}
+
+/*default body padding is 20px*/
+/*margin: 0; just why not*/
+body {
+	padding: 0;
+	margin: 0;
+}
+
+#diff-section {
+	width: 100%;
+}
+
+/* region form */
+.compare-btn-wrap {
+	width: 100%;
+	text-align: center;
+}
+
+.compare-btn-container {
+	/*display: inline-block;*/
+	margin-top: 1%;
+	text-align: center;
+}
+
+.inline-div {
+	width: 49.5%;
+	display:inline-block;
+}
+
+.inline-div p {
+	margin: 0;
+	font: 14px/17px Roboto, Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+.load-btn-container {
+	margin: 1% 0;
+	text-align: center;
+}
+
+.inline-textarea {
+	resize: none;
+	/*border : 2px solid red;*/
+	width: 100%;
+	height: 200px;
+	margin: 0 1%;
+}
+
+.textarea-wrap {
+	margin: auto;
+}
+
+input[type="file"] {
+	display: none;
+	/*visibility: hidden;*/
+}
+
+input[type="submit"] {
+	display: none;
+}
+/* endregion */
+
+/* region display-difference */
+#diff-result-container {
+	margin: 0.5%;
+	padding: 1px;
+	border: 1px solid gray;
+}
+
+.line {
+	margin: 1px 0;
+	/*padding: 3px;*/
+}
+
+.minus-line {
+	background: rgba(255, 0, 0, 0.5);
+}
+
+.plus-line {
+	background: rgba(0, 255, 0, 0.5);
+}
+
+.equal-line {
+	/*background: rgba(192, 192, 192, 0.5);*/
+	background: rgba(245, 245, 245, 0.5);
+}
+
+.compare-again-container {
+	margin-top: 1%;
+	margin-left: 0.5%;
+	/*padding: 1%;*/
+}
+/* endregion */
+
+
+/* region buttons */
+.btn {
+	display: inline;
+	background: #F2C94C;
+	border-radius: 5px;
+	font: 14px/17px Roboto, Arial, "Helvetica Neue", Helvetica, sans-serif;
+	color: #000000;
+	min-width: 179px;
+	text-align: center;
+	padding: 12px 25px 11px;
+	text-decoration: none;
+	transition: 250ms linear all;
+}
+
+.btn:hover
+{
+	background: #FEDE7D;
+	color: #333333;
+}
+
+.btn:active
+{
+	background: #F9C21C;
+	color: #333333;
+}
+
+.btn.btn-black
+{
+	background: #000;
+	color: #fff;
+}
+
+.btn.btn-black:hover
+{
+	background: #363636;
+	color: #FFF;
+}
+
+.btn.btn-big
+{
+	padding-top: 21px;
+	padding-bottom: 21px;
+	font-size: 18px;
+	line-height: 24px;
+}
+/* endregion */

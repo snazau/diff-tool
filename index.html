@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Diff tool</title>
+	<link rel="stylesheet" href="style.css">
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap&subset=cyrillic" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+	<script>
+		function sendDataWithResponse(event) {
+			var formData = new FormData();
+
+			var old_file = document.getElementById("old-file-upload");
+			if(old_file.files.length > 0) {
+				console.log("old_file loaded");
+				formData.append("oldFile", old_file.files[0]);
+			} else {
+				console.log("old_file not loaded");
+				var oldText = document.getElementById("old-textarea").value;
+				if (oldText.length > 0) {
+					console.log("old text set");
+					formData.append("oldText", oldText);
+				}
+				else {
+					alert("Type down old text or download it");
+					return;
+				}
+			}
+
+			var new_file = document.getElementById("new-file-upload");
+			if(new_file.files.length > 0) {
+				console.log("new_file loaded");
+				formData.append("newFile", new_file.files[0]);
+			} else {
+				console.log("new_file not loaded");
+				var newText = document.getElementById("new-textarea").value;
+				if (newText.length > 0) {
+					console.log("new text set");
+					formData.append("newText", newText);
+				}
+				else {
+					alert("Type down new text or download it");
+					return;
+				}
+			}
+
+			var request = new XMLHttpRequest();
+			var url = "/diff/process.php";
+			request.open("POST", url, true); // sending as POST
+			request.onreadystatechange = function() { // Call a function when the state changes.
+				if(request.readyState === 4 && request.status === 200) { // complete and no errors
+					console.log(request.responseText); // some processing here, or whatever you want to do with the response
+
+					// https://developer.mozilla.org/ru/docs/Web/API/DOMParser
+					var parser = new DOMParser();
+					doc = parser.parseFromString(request.responseText, "text/html");
+
+					console.log((doc.documentElement.getElementsByTagName('body')[0]));
+					document.getElementById("diff-result-container").innerHTML = "";
+					document.getElementById("diff-result-container").appendChild((doc.documentElement.getElementsByTagName('body')[0]));
+
+					var btnStr = '<div class="compare-again-container"><a class="btn" href="" id="btn-compare-again">Compare again</a></div>';
+					btn = parser.parseFromString(btnStr, "text/html");
+					if (document.getElementById("btn-compare-again") === null) {
+						document.getElementById("diff-result-wrap").innerHTML += (((btn.documentElement.getElementsByTagName('body')[0]).innerHTML));
+					}
+
+					document.getElementById("diff-result-container").style.visibility = "visible";
+					document.getElementById("diff-result-wrap").style.visibility = "visible";
+				}
+			};
+
+			request.send(formData);
+		}
+
+		document.addEventListener('DOMContentLoaded', function() {
+			document.getElementById('old-file-upload').onchange = function(evt) {
+				var tgt = evt.target;
+				var files = tgt.files;
+
+				// FileReader support
+				if (FileReader && files && files.length)
+				{
+					document.getElementById("old-textarea").disabled = true;
+				}
+			};
+
+			document.getElementById('new-file-upload').onchange = function(evt) {
+				var tgt = evt.target;
+				var files = tgt.files;
+
+				// FileReader support
+				if (FileReader && files && files.length)
+				{
+					document.getElementById("new-textarea").disabled = true;
+				}
+			};
+		});
+	</script>
+</head>
+	<body>
+		<div class="wrap">
+			<section id="diff-section">
+				<div class="compare-btn-container">
+						<a class="btn" onclick="sendDataWithResponse(this);">Compare</a>
+				</div>
+
+				<div class="textarea-wrap">
+					<div class="inline-div">
+						<p align="center">Old version</p>
+						<textarea class="inline-textarea" id="old-textarea" placeholder="Put old version of text here"></textarea>
+						<div class="load-btn-container">
+							<label for="old-file-upload" class="custom-file-upload" id="label-old-file-upload">
+								<a class="btn" id="btn-old-file-upload">Load file</a>
+							</label>
+							<input id="old-file-upload" name="old-file" type="file"/>
+						</div>
+					</div>
+					<div class="inline-div">
+						<p align="center">New version</p>
+						<textarea class="inline-textarea" id="new-textarea" placeholder="Put new version of text here"></textarea>
+						<div class="load-btn-container">
+							<label for="new-file-upload" class="custom-file-upload" id="label-new-file-upload">
+								<a class="btn" id="btn-new-file-upload">Load file</a>
+							</label>
+							<input id="new-file-upload" name="new-file" type="file"/>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<div class="diff-result-wrap" id="diff-result-wrap" style="visibility: hidden;">
+				<div id="diff-result-container" style="visibility: hidden;">
+
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
